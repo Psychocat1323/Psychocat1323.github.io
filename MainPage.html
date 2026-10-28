@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jessi Irabon Jr – Roblox Developer</title>
+<meta name="description" content="Roblox developer building gameplay systems, data persistence and client-server features in Luau.">
+<meta property="og:title" content="Jessi Irabon Jr – Roblox Developer">
+<meta property="og:description" content="Roblox developer building gameplay systems, data persistence and client-server features in Luau.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245bd6'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3EJI%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one calm left-aligned column, games in a responsive grid. */
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --ink: #15181e;
+  --muted: #5d6573;
+  --line: #e3e6ec;
+  --accent: #245bd6;
+  --accent-soft: #e9effc;
+  --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1116; --surface: #161a21; --ink: #e8eaf0; --muted: #98a0ae;
+    --line: #262b35; --accent: #7aa2ff; --accent-soft: #1b2438;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1116; --surface: #161a21; --ink: #e8eaf0; --muted: #98a0ae;
+  --line: #262b35; --accent: #7aa2ff; --accent-soft: #1b2438;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
+nav .brand { font-weight: 600; color: var(--ink); }
+nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
+nav ul a { color: var(--muted); }
+nav ul a:hover { color: var(--ink); text-decoration: none; }
+@media (max-width: 560px) { nav ul { display: none; } }
+
+/* Hero */
+header.hero { padding: 72px 0 56px; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; color: var(--accent); letter-spacing: .02em; margin: 0 0 14px; }
+h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.08; letter-spacing: -0.025em; margin: 0 0 18px; font-weight: 700; text-wrap: balance; }
+.lede { font-size: 18px; color: var(--muted); max-width: 62ch; margin: 0 0 28px; }
+.meta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.btn:hover { border-color: var(--accent); text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #0f1116; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #0f1116; } }
+.btn svg { width: 16px; height: 16px; }
+.location { font-size: 14px; color: var(--muted); margin-top: 18px; }
+
+/* Sections */
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 13px; font-family: var(--font-mono); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+.section-title { font-size: 26px; font-weight: 600; letter-spacing: -0.015em; margin: 0 0 28px; text-wrap: balance; }
+
+/* Games */
+.games { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+.game { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.thumb { aspect-ratio: 16 / 9; width: 100%; object-fit: cover; background: var(--accent-soft); display: grid; place-items: center; color: var(--muted); font-family: var(--font-mono); font-size: 12px; border-bottom: 1px solid var(--line); }
+.thumb span { border: 1px dashed color-mix(in srgb, var(--muted) 50%, transparent); padding: 6px 10px; border-radius: 6px; }
+.game-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.game h3 { font-size: 16px; margin: 0; font-weight: 600; line-height: 1.3; }
+.game .tag { font-size: 13px; color: var(--muted); margin: 0; }
+.game a.play { margin-top: auto; font-size: 14px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.note { font-size: 14px; color: var(--muted); margin: 0 0 24px; max-width: 62ch; }
+
+/* Systems */
+.systems { display: grid; gap: 14px; }
+.system { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+.system h3 { font-size: 17px; margin: 0 0 6px; font-weight: 600; }
+.system p { margin: 0; color: var(--muted); max-width: 70ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 3px 8px; border-radius: 5px; background: var(--accent-soft); color: var(--accent); }
+pre { margin: 16px 0 0; padding: 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.55; }
+pre .c { color: var(--muted); }
+pre .k { color: var(--accent); }
+.code-label { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-top: 14px; }
+
+/* Experience */
+.timeline { display: grid; gap: 0; }
+.job { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.job:last-child { border-bottom: 0; }
+.job .when { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 3px; }
+.job h3 { font-size: 17px; margin: 0; font-weight: 600; }
+.job .where { color: var(--muted); font-size: 14px; margin: 2px 0 8px; }
+.job p { margin: 0; max-width: 64ch; }
+@media (max-width: 600px) { .job { grid-template-columns: 1fr; gap: 4px; } }
+
+/* Skills & education */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+.skill-group { margin-bottom: 18px; }
+.skill-group h3 { font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+.edu { padding: 0 0 16px; }
+.edu h3 { font-size: 16px; margin: 0; font-weight: 600; }
+.edu p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.contact { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.contact .label { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.contact .value { font-weight: 500; margin-top: 4px; word-break: break-word; }
+
+footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">Jessi Irabon Jr</a>
+    <ul>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#systems">Systems</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="wrap">
+
+    <header class="hero">
+      <p class="eyebrow">Roblox Developer · Luau</p>
+      <h1>Jessi M. Irabon Jr</h1>
+      <p class="lede">I build gameplay mechanics, data persistence and client-server systems for Roblox games. Most of my work is improving live games: adding features, fixing what breaks under real players, and shipping updates with designers and artists.</p>
+      <div class="meta">
+        <a class="btn primary" href="#games">See my games</a>
+        <a class="btn" href="mailto:jessiirabon1213@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/jessi-irabon-jr-314582272" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p class="location">Quezon City, Metro Manila, Philippines · Open to remote work</p>
+    </header>
+
+    <!-- GAMES -->
+    <section id="games">
+      <h2>Games</h2>
+      <p class="section-title">Games I've worked on</p>
+      <p class="note">On these games I enhanced existing systems and built new features.</p>
+
+      <!-- To add a screenshot: put the image in the "images" folder, then replace
+           <div class="thumb"><span>Screenshot coming soon</span></div>
+           with <img class="thumb" src="images/your-file.png" alt="Game name screenshot"> -->
+      <div class="games">
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Tsunami Escape: Brainrot Chaos</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/games/86988444924123/Tsunami-Escape-Brainrot-Chaos" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Thor Forge</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=a3a68974e2c63847926ea6010b07ccf6&amp;type=ExperienceDetails&amp;stamp=1792649980025" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Escape Goblin Town</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=a28e67219085cb4f8515ed18ada785d0&amp;type=ExperienceDetails&amp;stamp=1792649949472" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>MoneyGuro</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=db75a44ab97c4a4fbd3d23cf5b2ba116&amp;type=ExperienceDetails&amp;stamp=1792649777437" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Kick A Poop</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=36fa2cd3ed1fa84a81a5a33ffb9e8489&amp;type=ExperienceDetails&amp;stamp=1792649832719" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Obby But You're On Unicycle</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=eaa10bf72a7add4385703f923d5e280f&amp;type=ExperienceDetails&amp;stamp=1792649864605" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="thumb"><span>Screenshot coming soon</span></div>
+          <div class="game-body">
+            <h3>Candy1</h3>
+            <p class="tag">Feature development and enhancements</p>
+            <a class="play" href="https://www.roblox.com/share?code=5c2b9e250485bb4cb4676cf49d3c6c9e&amp;type=ExperienceDetails&amp;stamp=1792649910155" target="_blank" rel="noopener">Play on Roblox →</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SYSTEMS -->
+    <section id="systems">
+      <h2>Systems</h2>
+      <p class="section-title">Systems I've built and fixed</p>
+
+      <div class="systems">
+
+        <article class="system">
+          <h3>Data saving with DataStore and ProfileStore</h3>
+          <p>Player data that saves and loads reliably: currencies, inventories, progress and daily rewards. I use ProfileStore for session-locked profiles so data isn't lost or duplicated when players switch servers, and I've fixed daily challenge resets so rewards can only be claimed once per day.</p>
+          <div class="chips"><span class="chip">DataStoreService</span><span class="chip">ProfileStore</span><span class="chip">Session locking</span><span class="chip">Daily rewards</span></div>
+        </article>
+
+        <article class="system">
+          <h3>Obby mechanics</h3>
+          <p>Obstacle course gameplay: checkpoints, kill parts, a run timer, a real-time tracker showing where every player is on the course, and rewards for progress. For moving hazards in multiplayer, the server handles hit detection while each client animates its own copy, so obstacles move smoothly for every player.</p>
+          <div class="chips"><span class="chip">Checkpoints</span><span class="chip">Timer</span><span class="chip">Player tracker</span><span class="chip">Rewards</span><span class="chip">Moving obstacles</span></div>
+        </article>
+
+        <article class="system">
+          <h3>Lobby, subplaces and teleporting</h3>
+          <p>Full game lobbies that send players into the game's subplaces with TeleportService, carrying their data with them between places. Players can queue for matchmaking, join with a party or with friends, or start a private server. The lobby also has an avatar system for customizing characters before a match, daily rewards, and leaderboards.</p>
+          <div class="chips"><span class="chip">TeleportService</span><span class="chip">Subplaces</span><span class="chip">Matchmaking &amp; queues</span><span class="chip">Parties &amp; friends</span><span class="chip">Private servers</span><span class="chip">Avatar system</span><span class="chip">Daily rewards</span><span class="chip">Leaderboards</span></div>
+        </article>
+
+        <article class="system">
+          <h3>Shop mechanics and monetization</h3>
+          <p>In-game shops where players spend earned currency or Robux, including Game Passes and Developer Products. Purchases are checked and granted on the server, and the shop UI updates as soon as a purchase goes through.</p>
+          <div class="chips"><span class="chip">MarketplaceService</span><span class="chip">Game Passes</span><span class="chip">Developer Products</span><span class="chip">Shop UI</span></div>
+        </article>
+
+        <article class="system">
+          <h3>Gun mechanics</h3>
+          <p>Weapon systems with shooting, ammo and reloading. The client handles input and effects for instant feedback, and the server validates each shot with raycasts before applying damage, which keeps combat fair.</p>
+          <div class="chips"><span class="chip">Raycasting</span><span class="chip">RemoteEvents</span><span class="chip">Server validation</span><span class="chip">Weapon effects</span></div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <h2>Experience</h2>
+      <p class="section-title">Where I've worked</p>
+
+      <div class="timeline">
+        <div class="job">
+          <div class="when">03/2026 – 10/2026</div>
+          <div>
+            <h3>Roblox Developer</h3>
+            <p class="where">SoaringEagle · Remote</p>
+            <p>Built gameplay mechanics, DataStore persistence and client-server systems in Luau across multiple Roblox games, working with designers and artists to ship updates on schedule.</p>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">09/2025 – 02/2026</div>
+          <div>
+            <h3>Roblox Developer</h3>
+            <p class="where">SmartyLLC · Remote</p>
+            <p>Developed and maintained game systems in Luau, including gameplay mechanics, data saving, UI and monetization.</p>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">01/2024 – 09/2024</div>
+          <div>
+            <h3>Roblox Developer</h3>
+            <p class="where">MicroSourcing Philippines · Quezon City</p>
+            <p>Programmed game features, working with artists and designers to keep each game consistent and engaging.</p>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">09/2023 – 11/2023</div>
+          <div>
+            <h3>Roblox Developer</h3>
+            <p class="where">Ottodot · Singapore</p>
+            <p>Worked with artists and designers to develop and release three original games each month.</p>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">08/2022 – 05/2023</div>
+          <div>
+            <h3>Information Technology Staff</h3>
+            <p class="where">Arellano University · Manila</p>
+            <p>Resolved hardware issues, maintained systems and optimized application data with SQL queries.</p>
+          </div>
+        </div>
+        <div class="job">
+          <div class="when">06/2022 – 08/2022</div>
+          <div>
+            <h3>Software Developer Trainee</h3>
+            <p class="where">Tsukiden Global Inc · Pasig</p>
+            <p>Developed and debugged software to meet project requirements.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS + EDUCATION -->
+    <section id="skills">
+      <div class="two-col">
+        <div>
+          <h2>Skills</h2>
+          <p class="section-title">What I work with</p>
+          <div class="skill-group">
+            <h3>Roblox</h3>
+            <div class="chips"><span class="chip">Luau</span><span class="chip">Roblox Studio</span><span class="chip">DataStore</span><span class="chip">ProfileStore</span><span class="chip">RemoteEvents</span><span class="chip">TweenService</span><span class="chip">UI</span><span class="chip">Monetization</span></div>
+          </div>
+          <div class="skill-group">
+            <h3>General</h3>
+            <div class="chips"><span class="chip">C#</span><span class="chip">.NET</span><span class="chip">SQL</span><span class="chip">Git</span><span class="chip">OOP</span></div>
+          </div>
+        </div>
+        <div>
+          <h2>Education</h2>
+          <p class="section-title">Arellano University</p>
+          <div class="edu">
+            <h3>Master of Business Administration</h3>
+            <p>2022 – 2023 · Manila</p>
+          </div>
+          <div class="edu">
+            <h3>BS in Computer Science</h3>
+            <p>2018 – 2022 · Manila</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p class="section-title">Let's work together</p>
+      <div class="contact-grid">
+        <div class="contact">
+          <div class="label">Email</div>
+          <div class="value"><a href="mailto:jessiirabon1213@gmail.com">jessiirabon1213@gmail.com</a></div>
+        </div>
+        <div class="contact">
+          <div class="label">Discord</div>
+          <div class="value"><a href="https://discord.com/users/804029358221295657" target="_blank" rel="noopener">m0nkeee_0</a></div>
+        </div>
+        <div class="contact">
+          <div class="label">LinkedIn</div>
+          <div class="value"><a href="https://www.linkedin.com/in/jessi-irabon-jr-314582272" target="_blank" rel="noopener">jessi-irabon-jr</a></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Jessi M. Irabon Jr</div>
+</footer>
+
+</body>
+</html>
